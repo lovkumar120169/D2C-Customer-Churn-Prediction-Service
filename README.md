@@ -2,32 +2,32 @@
 
 ## 1. Project Overview
 
-This project provides a production-ready FastAPI application that exposes a machine learning churn prediction model as an internal scoring API for CRM systems.
+This project delivers a production-ready FastAPI application that serves a machine learning churn prediction model through an internal scoring API designed for CRM and retention platforms.
 
-The objective is to identify customers with a high probability of churn so retention teams can prioritize outreach, improve customer experience, and optimize retention spending.
+The primary goal is to identify customers with an elevated likelihood of churn, enabling retention teams to prioritize interventions, enhance customer experiences, and allocate retention budgets more effectively.
 
-The API accepts customer behavioral features, performs real-time model inference, and returns:
+The API accepts customer behavioral attributes, performs real-time model scoring, and returns:
 
-- Churn probability score.
-- Predicted churn class.
-- Customer risk category.
-- Human-readable retention explanation.
+* Churn probability score.
+* Predicted churn class.
+* Customer risk category.
+* Human-readable retention explanation.
 
 The application includes:
 
-- FastAPI-based REST endpoints.
-- Pydantic input validation.
-- Scikit-learn model loading.
-- Batch prediction capability.
-- Automated API tests.
-- Docker-based reproducible deployment.
-- Production monitoring guidelines.
+* FastAPI-based REST endpoints.
+* Pydantic input validation.
+* Scikit-learn model loading.
+* Batch prediction capability.
+* Automated API tests.
+* Docker-based reproducible deployment.
+* Production monitoring guidelines.
 
 ---
 
 # 2. Repository Structure
 
-```
+```text
 d2c-churn-fastapi-service/
 │
 ├── app/
@@ -42,6 +42,8 @@ d2c-churn-fastapi-service/
 │
 ├── requirements.txt            # Python dependencies
 │
+├── .gitignore                  # Git ignore rules for virtual environments, cache files, and local artifacts
+│
 ├── monitoring_plan.md          # Production monitoring strategy
 │
 └── README.md                   # Project documentation
@@ -51,18 +53,18 @@ d2c-churn-fastapi-service/
 
 # 3. Model and Dataset Information
 
-The model was trained using the D2C customer churn dataset provided in the capstone project.
+The model was developed using the D2C customer churn dataset supplied as part of the capstone project.
 
-The final model uses customer behavioral and engagement features, including:
+The final model leverages customer engagement and behavioral attributes, including:
 
-- Purchase recency and frequency.
-- Customer spending behavior.
-- Return patterns.
-- Discount sensitivity.
-- Support interaction history.
-- Website and campaign engagement signals.
+* Purchase recency and frequency.
+* Customer spending behavior.
+* Return patterns.
+* Discount sensitivity.
+* Support interaction history.
+* Website and campaign engagement signals.
 
-The serialized model artifact (`model.pkl`) is loaded dynamically when the FastAPI service starts.
+The serialized model artifact (`model.pkl`) is automatically loaded when the FastAPI application starts.
 
 ---
 
@@ -110,21 +112,21 @@ pip install -r requirements.txt
 
 # 5. Running the FastAPI Application
 
-Start the application using Uvicorn:
+Launch the application using Uvicorn:
 
 ```bash
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-After successful startup, the API will be available at:
+Once the service starts successfully, it will be available at:
 
-```
+```text
 http://localhost:8000
 ```
 
-Interactive API documentation is available at:
+Interactive API documentation can be accessed at:
 
-```
+```text
 http://localhost:8000/docs
 ```
 
@@ -134,7 +136,7 @@ http://localhost:8000/docs
 
 ## GET /health
 
-Checks whether the API service is running successfully.
+Verifies that the API service is operational and the model has been loaded successfully.
 
 ### Example Request
 
@@ -155,7 +157,7 @@ GET http://localhost:8000/health
 
 ## POST /predict
 
-Generates a churn prediction for a single customer.
+Generates a churn prediction for an individual customer.
 
 ### Example Request
 
@@ -198,7 +200,7 @@ Generates a churn prediction for a single customer.
 
 ## POST /batch_predict
 
-Returns churn predictions for multiple customers in one request.
+Returns churn predictions for multiple customers within a single request.
 
 ### Example Request
 
@@ -256,12 +258,12 @@ Execute all API test cases using Pytest:
 pytest -v
 ```
 
-The test suite validates:
+The test suite verifies:
 
-- API health endpoint functionality.
-- Successful single customer predictions.
-- Pydantic validation for invalid inputs.
-- Batch prediction processing.
+* Health endpoint availability.
+* Successful single-customer predictions.
+* Input validation through Pydantic schemas.
+* Batch prediction functionality.
 
 ---
 
@@ -283,7 +285,7 @@ docker run -p 8000:8000 churn-api
 
 The application will be accessible at:
 
-```
+```text
 http://localhost:8000
 ```
 
@@ -291,43 +293,43 @@ http://localhost:8000
 
 # 9. Reproducibility Notes
 
-The project is fully reproducible because it includes:
+This project is designed to be fully reproducible and includes:
 
-- Version-pinned Python dependencies.
-- A serialized machine learning model artifact.
-- Automated test cases.
-- Containerized Docker deployment.
-- Clear installation and execution instructions.
+* Version-controlled Python dependencies.
+* Serialized machine learning model artifacts.
+* Automated test coverage.
+* Containerized deployment using Docker.
+* Clear installation and execution documentation.
 
-Any developer can clone the repository, install dependencies, and start the API without modifying source code.
+Any developer can clone the repository, install the dependencies, and launch the API without requiring modifications to the source code.
 
 ---
 
 # 10. Responsible Use Statement
 
-Churn predictions represent probability estimates rather than guaranteed customer outcomes.
+Churn predictions should be interpreted as probability estimates rather than guaranteed customer outcomes.
 
-Retention teams should use the API output as a decision-support tool alongside customer history, business context, and human judgment.
+Retention and CRM teams should use these predictions as decision-support inputs alongside customer history, business knowledge, and human judgment.
 
-The model should not be used as the only factor for customer treatment decisions, exclusion, or automated financial incentives.
+The model should not be used as the sole factor for customer treatment decisions, exclusion policies, or automated financial incentives.
 
 ---
 
 # 11. Future Improvements
 
-Potential production enhancements include:
+Potential enhancements for production environments include:
 
-- Model versioning with MLflow.
-- Continuous data drift monitoring.
-- Automated retraining pipelines.
-- Cloud deployment using Kubernetes.
-- Authentication and rate limiting.
-- Real-time monitoring dashboards.
+* Model version management using MLflow.
+* Continuous monitoring for data drift.
+* Automated retraining workflows.
+* Kubernetes-based cloud deployment.
+* Authentication and API rate limiting.
+* Real-time operational monitoring dashboards.
 
 ---
 
 # Conclusion
 
-This FastAPI churn scoring service demonstrates a complete production-oriented machine learning deployment workflow.
+This FastAPI churn prediction service showcases a complete production-focused machine learning deployment workflow.
 
-The system combines machine learning inference, API engineering, automated testing, Docker reproducibility, monitoring practices, and responsible AI guidelines suitable for an enterprise CRM environment.
+The solution combines predictive modeling, API development, automated testing, Docker-based reproducibility, monitoring best practices, and responsible AI principles suitable for enterprise-grade CRM and retention environments.
