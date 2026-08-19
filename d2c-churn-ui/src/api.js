@@ -1,7 +1,7 @@
 // Base URL of the deployed (or local) FastAPI churn service.
 // Set VITE_API_URL in a .env file to point this at your deployed backend,
 // e.g. VITE_API_URL=https://d2c-churn-api.onrender.com
-export const API_BASE_URL = "http://localhost:8000";
+export const API_BASE_URL = "https://d2c-churn-api.onrender.com";
 
 export class ApiError extends Error {
   constructor(message, status, detail) {

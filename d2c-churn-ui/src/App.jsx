@@ -2,8 +2,14 @@ import React, { useEffect, useState } from "react";
 import ChurnForm from "./components/ChurnForm.jsx";
 import ResultPanel from "./components/ResultPanel.jsx";
 import TestCustomers from "./components/TestCustomers.jsx";
+import BatchPredictPanel from "./components/BatchPredictPanel.jsx";
 import { checkHealth, predictChurn } from "./api.js";
 import { buildDefaultPayload, NUMERIC_GROUPS } from "./schema.js";
+
+const MODES = [
+  { key: "single", label: "Single Customer" },
+  { key: "batch", label: "Batch Predict (CSV)" },
+];
 
 const ALL_NUMERIC_FIELDS = NUMERIC_GROUPS.flatMap((g) => g.fields);
 
@@ -35,6 +41,7 @@ export default function App() {
   const [apiOnline, setApiOnline] = useState(null);
 
   const [loadedCustomer, setLoadedCustomer] = useState(null);
+  const [mode, setMode] = useState("single");
 
   useEffect(() => {
     checkHealth()
@@ -176,9 +183,28 @@ export default function App() {
           </div>
         </header>
 
-        <TestCustomers onLoadCustomer={handleLoadCustomer} />
+        <div className="mb-6 flex flex-wrap gap-1.5 rounded-xl border border-surface-border bg-surface p-1.5 shadow-panel">
+          {MODES.map((m) => (
+            <button
+              key={m.key}
+              type="button"
+              onClick={() => setMode(m.key)}
+              className={`flex-1 rounded-lg px-4 py-2 font-body text-xs font-semibold transition sm:flex-none sm:px-5 ${
+                mode === m.key
+                  ? "bg-signal text-white shadow-glow"
+                  : "text-ink2-muted hover:text-ink2-primary"
+              }`}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
 
-        {loadedCustomer && (
+        {mode === "single" && (
+          <TestCustomers onLoadCustomer={handleLoadCustomer} />
+        )}
+
+        {mode === "single" && loadedCustomer && (
           <div className="mb-6 flex flex-col gap-3 rounded-xl border border-signal/30 bg-signal-soft px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
               <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-signal text-white">
@@ -218,29 +244,35 @@ export default function App() {
           </div>
         )}
 
-        <main className="grid flex-1 grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
-          <section
-            id="customer-form"
-            className="rounded-2xl border border-surface-border bg-surface p-6 shadow-panel"
-          >
-            <ChurnForm
-              values={values}
-              onChange={handleChange}
-              onSubmit={handleSubmit}
-              loading={loading}
-              errors={errors}
-            />
-          </section>
+        {mode === "single" ? (
+          <main className="grid flex-1 grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
+            <section
+              id="customer-form"
+              className="rounded-2xl border border-surface-border bg-surface p-6 shadow-panel"
+            >
+              <ChurnForm
+                values={values}
+                onChange={handleChange}
+                onSubmit={handleSubmit}
+                loading={loading}
+                errors={errors}
+              />
+            </section>
 
-          <aside className="rounded-2xl border border-surface-border bg-surface p-6 shadow-panel lg:sticky lg:top-8 lg:h-fit">
-            <ResultPanel
-              result={result}
-              loading={loading}
-              apiError={apiError}
-              apiOnline={apiOnline}
-            />
-          </aside>
-        </main>
+            <aside className="rounded-2xl border border-surface-border bg-surface p-6 shadow-panel lg:sticky lg:top-8 lg:h-fit">
+              <ResultPanel
+                result={result}
+                loading={loading}
+                apiError={apiError}
+                apiOnline={apiOnline}
+              />
+            </aside>
+          </main>
+        ) : (
+          <main className="flex-1">
+            <BatchPredictPanel />
+          </main>
+        )}
 
         <footer className="mt-8 text-center font-body text-xs text-ink2-faint">
           Predictions are decision-support estimates, not guaranteed outcomes.
