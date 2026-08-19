@@ -8,6 +8,11 @@ from typing import Any, List, Sequence
 import pandas as pd
 from fastapi import FastAPI, HTTPException, status
 from pydantic import BaseModel, ConfigDict, Field
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
 
 
 logger = logging.getLogger(__name__)
@@ -154,6 +159,15 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 
 def get_model() -> Any:
