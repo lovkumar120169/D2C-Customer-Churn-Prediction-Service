@@ -3,6 +3,7 @@ import { batchPredictChurn } from "../api.js";
 import {
   downloadCsvTemplate,
   downloadResultsCsv,
+  downloadTestCsv,
   parseCustomerCsv,
 } from "../csv.js";
 
@@ -99,12 +100,12 @@ export default function BatchPredictPanel() {
 
   const summary = results
     ? results.reduce(
-        (acc, p) => {
-          acc[p.risk_level] = (acc[p.risk_level] || 0) + 1;
-          return acc;
-        },
-        { Low: 0, Medium: 0, High: 0 }
-      )
+      (acc, p) => {
+        acc[p.risk_level] = (acc[p.risk_level] || 0) + 1;
+        return acc;
+      },
+      { Low: 0, Medium: 0, High: 0 }
+    )
     : null;
 
   return (
@@ -121,13 +122,23 @@ export default function BatchPredictPanel() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={downloadCsvTemplate}
-          className="shrink-0 rounded-lg border border-surface-border px-3.5 py-2 font-body text-xs font-medium text-ink2-muted transition hover:border-signal hover:text-ink2-primary"
-        >
-          ↓ Download CSV template
-        </button>
+
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <button
+            type="button"
+            onClick={downloadCsvTemplate}
+            className="shrink-0 rounded-lg border border-surface-border px-3.5 py-2 font-body text-xs font-medium text-ink2-muted transition hover:border-signal hover:text-ink2-primary"
+          >
+            ↓ Download CSV template
+          </button>
+          <button
+            type="button"
+            onClick={downloadTestCsv}
+            className="shrink-0  rounded-lg border border-surface-border px-3.5 py-2 font-body text-xs font-medium text-ink2-muted transition hover:border-signal hover:text-ink2-primary"
+          >
+            ↓ Download Test CSV
+          </button>
+        </div>
       </div>
 
       {/* Upload zone */}
@@ -264,9 +275,8 @@ export default function BatchPredictPanel() {
                       <td className="px-3 py-2 font-body text-xs">
                         {prediction ? (
                           <span
-                            className={`inline-flex items-center rounded-full border px-2 py-0.5 font-mono text-[10px] font-semibold ${
-                              RISK_BADGE[prediction.risk_level]
-                            }`}
+                            className={`inline-flex items-center rounded-full border px-2 py-0.5 font-mono text-[10px] font-semibold ${RISK_BADGE[prediction.risk_level]
+                              }`}
                           >
                             {(prediction.churn_probability * 100).toFixed(1)}%
                             · {prediction.risk_level}
