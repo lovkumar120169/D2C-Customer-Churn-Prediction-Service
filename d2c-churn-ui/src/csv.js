@@ -140,8 +140,19 @@ export function downloadCsvTemplate() {
     data: [TEMPLATE_COLUMNS.map((col) => exampleRow[col])],
   });
 
-  triggerCsvDownload(csv, "churn_batch_template.csv");
+  triggerCsvDownload(csv, "churn_batch_customers.csv");
 }
+
+export function downloadTestCsv() {
+  const link = document.createElement("a");
+  link.href = "/batch_test_customers.csv";
+  link.download = "batch_test_customers.csv";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+
 
 // Merges the original rows with the API's ordered prediction results and
 // exports the combined table as a CSV the user can open in a spreadsheet.
